@@ -1,17 +1,17 @@
 import random
 
 g = open("champs.csv", "w+")
-g.write('champ'+'\n')
+g.write('champ' + '\n')
 h = open("all_matches.csv", "w+")
-h.write('team1;team2;goals1;goals2;pen1;pen2;idx'+'\n')
-#kn = open("advanced.txt", "w+")
+h.write('team1;team2;goals1;goals2;pen1;pen2;idx' + '\n')
 grp = open("groups.csv", "w+")
-grp.write('group_name;1st;2nd;3rd;4th'+'\n')
-idx=0
+grp.write('group_name;1st;2nd;3rd;4th' + '\n')
+idx = 0
+
 
 def sim_match(team1, team2, is_knockout=False):
     global idx
-    idx+=1
+    idx += 1
     # elo ratings vars
     dr = (team1.rating - team2.rating)
     we = 1 / (10 ** (-dr / 400) + 1)
@@ -20,10 +20,6 @@ def sim_match(team1, team2, is_knockout=False):
     goals1 = score_som_foking_goals(we)
     goals2 = score_som_foking_goals(1 - we)
 
-    # goals1=random.randint(0,3)
-    # goals2 = random.randint(0, 3)
-
-    #print(str(team1)+' '+str(team2)+' wynik to '+str(goals1)+' : '+str(goals2))
     winner = None
     loser = None
     w = -1
@@ -39,8 +35,9 @@ def sim_match(team1, team2, is_knockout=False):
             else:
                 winner = team1
                 loser = team2
-            # print(goals1, goals2, winner)
-            h.write(str(team1) + ';' + str(team2) + ';' + str(goals1) + ';' + str(goals2) + ';' + str(pen[0]) + ';' + str(pen[1])+';' + str(idx)+'\n')
+            h.write(
+                str(team1) + ';' + str(team2) + ';' + str(goals1) + ';' + str(goals2) + ';' + str(pen[0]) + ';' + str(
+                    pen[1]) + ';' + str(idx) + '\n')
             return winner, (goals1, pen[0]), (goals2, pen[1]), loser
     if goals1 > goals2:
         winner = team1
@@ -69,7 +66,7 @@ def sim_match(team1, team2, is_knockout=False):
     team2.gs += goals2
     team2.gc += goals1
 
-    h.write(str(team1)+';'+str(team2)+';'+str(goals1)+';'+str(goals2)+';ND;ND;'+str(idx)+'\n')
+    h.write(str(team1) + ';' + str(team2) + ';' + str(goals1) + ';' + str(goals2) + ';ND;ND;' + str(idx) + '\n')
     return winner, goals1, goals2, loser
 
 
@@ -88,10 +85,7 @@ def pens():
 
 def knockout_rounds(still_there):
     rnd = len(still_there)
-    # for i in range(rnd):
-    #     kn.write(str(still_there[i])+';')
-    # kn.write('\n')
-    # all of this if statement just to play 3rd place game
+    # all of this if statement just to play 3rd place game:
     if rnd == 4:
         final = [None, None]
         sf1 = sim_match(still_there[0], still_there[1], is_knockout=True)
@@ -103,12 +97,10 @@ def knockout_rounds(still_there):
         if rnd == 1:
             g.write(str(still_there[0].name) + '\n')
             global idx
-            idx=0
+            idx = 0
             return still_there[0]  # world champ here
         next_round = [None] * int(rnd / 2)
         for i in range(0, rnd, 2):
-            # print(i)
-            # print(still_there[i], still_there[i+1])
             next_round[int(i / 2)] = sim_match(still_there[i], still_there[i + 1], is_knockout=True)[0]
         knockout_rounds(next_round)
 
@@ -136,7 +128,6 @@ class Team:
         if self.pts == other.pts:
             if (self.gs - self.gc) == (other.gs - other.gc):
                 if self.gs == other.gs:
-                    #print('ochuj')
                     return self.rating < other.rating
                 return self.gs < other.gs
             return (self.gs - self.gc) < (other.gs - other.gc)
@@ -151,7 +142,8 @@ class Group:
         self.teamsy = sorted(teamsy)
 
     def __repr__(self) -> str:
-        return self.name + ';' + str(self.teamsy[0]) + ';' + str(self.teamsy[1]) + ';' + str(self.teamsy[2]) + ';' + str(self.teamsy[3])
+        return self.name + ';' + str(self.teamsy[0]) + ';' + str(self.teamsy[1]) + ';' + str(
+            self.teamsy[2]) + ';' + str(self.teamsy[3])
 
     def group_matches(self):
         sim_match(self.teamsy[0], self.teamsy[1])
@@ -162,7 +154,7 @@ class Group:
         sim_match(self.teamsy[1], self.teamsy[2])
 
         self.teamsy = sorted(self.teamsy, reverse=True)
-        grp.write(str(self)+'\n')
+        grp.write(str(self) + '\n')
 
 
 def score_som_foking_goals(we):
@@ -172,9 +164,7 @@ def score_som_foking_goals(we):
     qua = tri * x
 
     result = random.random()
-    # error_corrector=0.3743*qua - 0.8052*tri + 0.589*squ - 0.1667*x + 1.0145
     error_corrector = 0.3345 * qua - 0.7207 * tri + 0.5316 * squ - 0.1541 * x + 1.0144
-    #error_corrector=1
     goals_0 = (1.6163 * qua - 4.1663 * tri + 3.7334 * squ - 1.8312 * x + 0.713) / error_corrector
     if result < goals_0: return 0
     goals_1 = (-1.6687 * qua + 3.295 * tri - 2.6629 * squ + 0.9349 * x + 0.2587) / error_corrector
@@ -186,6 +176,7 @@ def score_som_foking_goals(we):
     goals_4 = max(0, (0.8176 * qua - 1.3061 * tri + 0.8288 * squ - 0.1631 * x + 0.0086)) / error_corrector
     if result < (goals_0 + goals_1 + goals_2 + goals_3 + goals_4): return 4
     goals_5 = max(0, (0.4762 * qua - 0.7185 * tri + 0.3817 * squ - 0.0783 * x + 0.0048)) / error_corrector
-    if result < (goals_0 + goals_1 + goals_2 + goals_3 + goals_4 + goals_5): return 5
-    else: return 0
-
+    if result < (goals_0 + goals_1 + goals_2 + goals_3 + goals_4 + goals_5):
+        return 5
+    else:
+        return 0
