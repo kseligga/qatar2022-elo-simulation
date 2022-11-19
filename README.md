@@ -6,7 +6,7 @@ Simulation of 2022 FIFA World Cup, based on ELO ratings
 
 ## Modeling
 
-**modeling_report.pdf** - Quick pdf report from what is done in all of the other modeling files. Here is written about methodology of simulation.<br>
+**modeling_report.pdf** - quick pdf report from what is done in all of the other modeling files. Here is written about methodology of simulation<br>
 **stspaste.txt** - pasted data from a bookmaker, used in model_making.py<br>
 **model_making.py** - generates model_res.csv and bookmaker_we.csv<br>
 **model_res.csv** - data from bookmaker, win expectancy and prob. of scoring n goals<br>
