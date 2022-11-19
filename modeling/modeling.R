@@ -19,10 +19,11 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-
+# bookmaker_we.csv and model_res generated in model_making.py
+# elo_we.csv generated in python simulation files (not in repo)
 bookmaker<-read.csv("model_res.csv", sep=";")
 bookmaker_we<-read.csv("bookmaker_we.csv", sep=";")
-elo_we<-read.csv("elo.csv", sep=";")
+elo_we<-read.csv("elo_we.csv", sep=";")
 
 elo_we<-as.data.frame(elo_we %>% 
   filter(idx<=48) %>% 
