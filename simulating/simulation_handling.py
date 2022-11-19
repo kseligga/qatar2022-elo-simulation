@@ -6,6 +6,8 @@ h = open("all_matches.csv", "w+")
 h.write('team1;team2;goals1;goals2;pen1;pen2;idx' + '\n')
 grp = open("groups.csv", "w+")
 grp.write('group_name;1st;2nd;3rd;4th' + '\n')
+wes = open("elo_we.csv", "w+")
+wes.write('idx;team1;team2;we_team1\n')
 idx = 0
 
 
@@ -16,6 +18,7 @@ def sim_match(team1, team2, is_knockout=False):
     dr = (team1.rating - team2.rating)
     we = 1 / (10 ** (-dr / 400) + 1)
 
+    wes.write(str(idx)+';'+str(team1)+';'+str(team2)+';'+str(we)+'\n')
     # drawing goals for each team
     goals1 = score_som_foking_goals(we)
     goals2 = score_som_foking_goals(1 - we)
